@@ -1,7 +1,5 @@
 package actors;
 
-import message.Message;
-
 import java.util.HashMap;
 
 /**

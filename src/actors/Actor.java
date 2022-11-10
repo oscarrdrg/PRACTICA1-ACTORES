@@ -1,8 +1,6 @@
 package actors;
 
 import java.util.LinkedList;
-import java.util.Objects;
-
 import interfaces.SendMessage;
 import message.Message;
 
