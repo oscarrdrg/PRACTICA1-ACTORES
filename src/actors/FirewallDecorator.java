@@ -10,7 +10,7 @@ public class FirewallDecorator extends Actor {
     Actor client;
 
     public FirewallDecorator(Actor client) {
-        super(client.getName());
+        super(client.getName() + " decorator");
         this.client = client;
     }
 
