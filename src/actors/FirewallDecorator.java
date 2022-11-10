@@ -10,7 +10,7 @@ public class FirewallDecorator extends Actor {
     Actor client;
 
     public FirewallDecorator(Actor client) {
-        super("");
+        super(client.getName());
         this.client = client;
     }
 
@@ -22,7 +22,7 @@ public class FirewallDecorator extends Actor {
         while (!finished) {
             if (getQueue().isEmpty()) {
 
-                System.out.println("No messages to process " + getName());
+                System.out.println("No messages to process " + getName() + " decorator");
                 try {
                     Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
                 } catch (InterruptedException e) {
@@ -35,7 +35,7 @@ public class FirewallDecorator extends Actor {
                 if (message != null) {
                     if (!message.getMessage().equals("quite")) {
 
-                        setMessageList("I'm a decorator");
+                        setMessageList("This is a FirewallDecorator, it's amazing this program!");
                         Actor newActor = message.getActor();
                         newActor.send(new Message(this, getMessageFromList()));
 
@@ -55,7 +55,9 @@ public class FirewallDecorator extends Actor {
     public void getMessages() {
         System.out.println("\nactor " + getName() + " list message");
         System.out.println("--------------------------------------");
-        getQueue().forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName()));
+        getQueue().forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName() + " decorator"));
         System.out.println("\n");
     }
+
 }
+

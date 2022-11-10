@@ -10,10 +10,10 @@ public class Main {
         //Create the proxies
         ActorProxy proxy = ActorContext.spawnActor(new Actor("Oscar"));
         ActorProxy proxy2 = ActorContext.spawnActor(new Actor("Javi"));
-        //ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(new Actor("Prueba")));
+        ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
 
         //Starting the communication
-        proxy.send(new Message(proxy2.getActor(), "Start the communication"));
+        decorator.send(new Message(proxy2.getActor(), "Start the communication"));
 
 
         //See the actors in context
