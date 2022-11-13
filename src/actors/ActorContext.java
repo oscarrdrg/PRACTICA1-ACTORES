@@ -23,6 +23,7 @@ public class ActorContext {
 
         Thread thread = new Thread(newActorProxy.getActor()); //Create Thread
         thread.start();
+
         //We start the thread that will process the messages
         try {
             Thread.sleep(2000); //Sleep the Thread

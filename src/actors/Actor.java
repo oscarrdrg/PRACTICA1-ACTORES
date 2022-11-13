@@ -67,6 +67,7 @@ public class Actor implements SendMessage, Runnable {
 
                         System.out.println("I received a quite message from " + message.getActor().getName());
                         finished = true;
+
                     }
 
                 }
