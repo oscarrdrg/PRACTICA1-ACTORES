@@ -1,6 +1,7 @@
 package actors;
 
 import java.util.LinkedList;
+
 import interfaces.SendMessage;
 import message.Message;
 
@@ -29,6 +30,11 @@ public class Actor implements SendMessage, Runnable {
 
         //In case the process doesn't finish, we're still processing messages
         while (!finished) {
+            try {
+                Thread.sleep(2000); //Sleep the Thread
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             if (queue.isEmpty()) {
 
                 System.out.println("No messages to process " + getName());
@@ -39,6 +45,11 @@ public class Actor implements SendMessage, Runnable {
                 }
 
             } else {
+                try {
+                    Thread.sleep(2000); //Sleep the Thread
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 getMessages();
                 Message message = queue.poll(); //Get the first message and delete it
                 if (message != null) {
@@ -46,12 +57,16 @@ public class Actor implements SendMessage, Runnable {
 
                         Actor newActor = message.getActor();
                         newActor.send(new Message(this, getMessageFromList()));
+                        try {
+                            Thread.sleep(2000); //Sleep the Thread
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
 
                     } else {
 
                         System.out.println("I received a quite message from " + message.getActor().getName());
                         finished = true;
-
                     }
 
                 }
@@ -60,6 +75,7 @@ public class Actor implements SendMessage, Runnable {
         }
 
         System.out.println("Thread finished " + getName());
+
 
     }
 
@@ -73,6 +89,10 @@ public class Actor implements SendMessage, Runnable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public LinkedList<String> getMessageList() {
+        return messageList;
     }
 
     public void getMessages() {
@@ -94,7 +114,7 @@ public class Actor implements SendMessage, Runnable {
         messageList.add("quite");
     }
 
-    protected void setMessageList(String message){
+    protected void setMessageList(String message) {
         messageList.add(message);
     }
 

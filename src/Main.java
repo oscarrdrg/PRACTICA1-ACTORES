@@ -1,4 +1,5 @@
 import actors.*;
+import actors.decorators.FirewallDecorator;
 import message.Message;
 
 /**
@@ -12,12 +13,17 @@ public class Main {
         ActorProxy proxy2 = ActorContext.spawnActor(new Actor("Javi"));
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
 
-        //Starting the communication
-        decorator.send(new Message(proxy2.getActor(), "Start the communication"));
-
-
         //See the actors in context
         ActorContext.getActorsFromContext();
+
+        //Starting the communication
+        RingActor ringActor = new RingActor();
+        ringActor.addProxies(proxy);
+        ringActor.addProxies(proxy2);
+        ringActor.addProxies(decorator);
+
+        ringActor.startCommunication();
+
 
     }
 }

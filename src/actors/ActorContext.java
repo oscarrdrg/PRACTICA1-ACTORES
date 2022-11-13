@@ -22,7 +22,14 @@ public class ActorContext {
         newActorProxy.setActor(actor); //Set the Actor reference to the proxy
 
         Thread thread = new Thread(newActorProxy.getActor()); //Create Thread
-        thread.start(); //We start the thread that will process the messages
+        thread.start();
+        //We start the thread that will process the messages
+        try {
+            Thread.sleep(2000); //Sleep the Thread
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
 
         return newActorProxy; //Return the proxy
 
@@ -38,6 +45,7 @@ public class ActorContext {
         System.out.println("-------------------------------");
 
         actorList.forEach((k, v) -> System.out.println(k));
+        System.out.println("\n");
     }
 
     public static HashMap<String, Actor> getActorList() {
