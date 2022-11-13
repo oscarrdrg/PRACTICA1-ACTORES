@@ -1,5 +1,6 @@
 package actors;
 
+import actors.proxy.ActorProxy;
 import message.Message;
 
 import java.util.LinkedList;

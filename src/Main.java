@@ -1,6 +1,7 @@
 import actors.*;
 import actors.decorators.FirewallDecorator;
-import message.Message;
+import actors.proxy.ActorProxy;
+import actors.singleton.ActorContext;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,7 @@
-package actors;
+package actors.singleton;
+
+import actors.Actor;
+import actors.proxy.ActorProxy;
 
 import java.util.HashMap;
 

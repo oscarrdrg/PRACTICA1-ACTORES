@@ -1,5 +1,6 @@
-package actors;
+package actors.proxy;
 
+import actors.Actor;
 import interfaces.SendMessage;
 import message.Message;
 
