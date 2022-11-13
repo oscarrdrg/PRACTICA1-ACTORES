@@ -37,7 +37,7 @@ public class Actor implements SendMessage, Runnable {
             }
             if (queue.isEmpty()) {
 
-                System.out.println("No messages to process " + getName());
+                System.out.println("No messages to process: " + getName());
                 try {
                     Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
                 } catch (InterruptedException e) {

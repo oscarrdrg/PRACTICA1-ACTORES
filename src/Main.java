@@ -15,7 +15,8 @@ public class Main {
 
         //Create the proxies
         ActorProxy proxy = ActorContext.spawnActor(new Actor("Oscar"));
-        ActorProxy proxy2 = ActorContext.spawnActor(new Actor("Javi"));
+        ActorProxy proxy2 = ActorContext.spawnActor(new Actor("Peter"));
+        ActorProxy proxy3 = ActorContext.spawnActor(new Actor("William"));
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
         
         //See the actors in context
@@ -25,6 +26,7 @@ public class Main {
         RingActor ringActor = new RingActor();
         ringActor.addProxies(proxy);
         ringActor.addProxies(proxy2);
+        ringActor.addProxies(proxy3);
         ringActor.addProxies(decorator);
 
         ringActor.startCommunication();
