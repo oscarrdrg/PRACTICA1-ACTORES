@@ -22,7 +22,7 @@ public class FirewallDecorator extends Actor {
         //In case the process doesn't finish, we're still processing messages
         while (!finished) {
             try {
-                Thread.sleep(3000); //Sleep the Thread
+                Thread.sleep(2000); //Sleep the Thread
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -30,7 +30,7 @@ public class FirewallDecorator extends Actor {
 
                 System.out.println("No messages to process " + getName());
                 try {
-                    Thread.sleep(3000); //Sleep the Thread to process messages in case queue is empty
+                    Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
