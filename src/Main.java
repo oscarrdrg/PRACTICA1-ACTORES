@@ -21,7 +21,7 @@ public class Main {
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(2000); //Sleep the Thread to print well the Actors in context
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -29,6 +29,7 @@ public class Main {
         //See the actors in context
         ActorContext.getActorsFromContext();
 
+        //Set the Actors reference to each others
         proxy.getActor().setNextActorToConnect(proxy2.getActor());
         proxy2.getActor().setNextActorToConnect(proxy3.getActor());
         proxy3.getActor().setNextActorToConnect(decorator.getActor());

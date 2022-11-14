@@ -64,7 +64,9 @@ public class Actor implements SendMessage, Runnable {
                 Message message = queue.poll(); //Get the first message and delete it
                 if (message != null) {
                     if (!message.message().equals("quite")) {
+
                         Actor newActor = message.actor();
+
                         try {
                             Thread.sleep(2000); //Sleep the Thread
                         } catch (InterruptedException e) {
@@ -83,8 +85,9 @@ public class Actor implements SendMessage, Runnable {
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
-                            nextActorToConnect.send(new Message(this, "Start communication"));
-                            firstCommunication = true;
+
+                            nextActorToConnect.send(new Message(this, "Start communication")); //We send a message to our Actor reference to start the communication
+                            firstCommunication = true; //Set first communication to true, we check that we are not going to send this message again
                         }
 
                     } else {

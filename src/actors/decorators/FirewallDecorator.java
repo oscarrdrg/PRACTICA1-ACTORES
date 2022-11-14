@@ -48,6 +48,7 @@ public class FirewallDecorator extends Actor {
 
                         setMessageList("This is a FirewallDecorator, it's amazing this program!");
                         Actor newActor = message.actor();
+
                         try {
                             Thread.sleep(2000); //Sleep the Thread
                         } catch (InterruptedException e) {
@@ -66,8 +67,8 @@ public class FirewallDecorator extends Actor {
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
-                            getNextActorToConnect().send(new Message(this, "Start communication"));
-                            firstCommunication = true;
+                            getNextActorToConnect().send(new Message(this, "Start communication")); //We send a message to our Actor reference to start the communication
+                            firstCommunication = true; //Set first communication to true, we check that we are not going to send this message again
                         }
 
                     } else {
