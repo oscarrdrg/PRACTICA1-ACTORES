@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * @author Oscar
  */
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         intro();
 
@@ -19,7 +19,13 @@ public class Main {
         ActorProxy proxy2 = ActorContext.spawnActor(new Actor("Peter"));
         ActorProxy proxy3 = ActorContext.spawnActor(new Actor("William"));
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
-        
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         //See the actors in context
         ActorContext.getActorsFromContext();
 
@@ -28,29 +34,18 @@ public class Main {
         proxy3.getActor().setNextActorToConnect(decorator.getActor());
         decorator.getActor().setNextActorToConnect(proxy.getActor());
 
-        proxy.send(new Message(decorator.getActor(), "Start communication"));
-
-
-
         //Starting the communication
-        /*RingActor ringActor = new RingActor();
-        ringActor.addProxies(proxy);
-        ringActor.addProxies(proxy2);
-        ringActor.addProxies(proxy3);
-        ringActor.addProxies(decorator);
-
-        ringActor.startCommunication();*/
-
+        proxy.send(new Message(decorator.getActor(), "Start communication"));
 
     }
 
-    public static void intro(){
+    public static void intro() {
 
         System.out.println("\n\t**********************");
         System.out.println("\tACTORS EXERCISE");
         System.out.println("        by Óscar Rodrigo");
         System.out.println("\t**********************\n");
-        System.out.println("Date: "+LocalDate.now());
+        System.out.println("Date: " + LocalDate.now());
         System.out.println("Course: TAP(CAT) (Advanced Programming Techniques)");
         System.out.println("Professor: Pedro Antonio García López");
         System.out.println("-------------------------------------\n");

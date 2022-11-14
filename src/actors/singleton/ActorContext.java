@@ -10,7 +10,7 @@ import java.util.HashMap;
  */
 public class ActorContext {
 
-    private static HashMap<String, Actor> actorList = new HashMap<>();
+    private static final HashMap<String, Actor> actorList = new HashMap<>();
 
     /*In this function we create a proxy of an Actor reference,
     this will allow us to receive and send messages from other actors.*/
@@ -49,13 +49,5 @@ public class ActorContext {
 
         actorList.forEach((k, v) -> System.out.println(k));
         System.out.println("\n");
-    }
-
-    public static HashMap<String, Actor> getActorList() {
-        return actorList;
-    }
-
-    public static void setActorList(HashMap<String, Actor> actorList) {
-        ActorContext.actorList = actorList;
     }
 }

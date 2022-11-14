@@ -11,7 +11,7 @@ import message.Message;
 
 public class Actor implements SendMessage, Runnable {
 
-    private String name;
+    private final String name;
     private final LinkedList<Message> queue;
 
     private Actor nextActorToConnect;
@@ -63,8 +63,13 @@ public class Actor implements SendMessage, Runnable {
                 getMessages();
                 Message message = queue.poll(); //Get the first message and delete it
                 if (message != null) {
-                    if (!message.getMessage().equals("quite")) {
-                        Actor newActor = message.getActor();
+                    if (!message.message().equals("quite")) {
+                        Actor newActor = message.actor();
+                        try {
+                            Thread.sleep(2000); //Sleep the Thread
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                         newActor.send(new Message(this, getMessageFromList()));
                         try {
                             Thread.sleep(2000); //Sleep the Thread
@@ -84,7 +89,7 @@ public class Actor implements SendMessage, Runnable {
 
                     } else {
 
-                        System.out.println("I received a quite message from " + message.getActor().getName());
+                        System.out.println("I received a quite message from " + message.actor().getName());
                         finished = true;
 
                     }
@@ -107,19 +112,11 @@ public class Actor implements SendMessage, Runnable {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LinkedList<String> getMessageList() {
-        return messageList;
-    }
-
     public void getMessages() {
         if (!queue.isEmpty()) {
             System.out.println("\nactor " + getName() + " list message");
             System.out.println("--------------------------------------");
-            queue.forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName()));
+            queue.forEach(m -> System.out.println(m.actor().getName() + " says " + "\"" + m.message() + "\"" + " to " + getName()));
             System.out.println("\n");
         }
     }

@@ -44,10 +44,15 @@ public class FirewallDecorator extends Actor {
                 getMessages();
                 Message message = getQueue().poll(); //Get the first message and delete it
                 if (message != null) {
-                    if (!message.getMessage().equals("quite")) {
+                    if (!message.message().equals("quite")) {
 
                         setMessageList("This is a FirewallDecorator, it's amazing this program!");
-                        Actor newActor = message.getActor();
+                        Actor newActor = message.actor();
+                        try {
+                            Thread.sleep(2000); //Sleep the Thread
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                         newActor.send(new Message(this, getMessageFromList()));
                         try {
                             Thread.sleep(2000); //Sleep the Thread
@@ -67,7 +72,7 @@ public class FirewallDecorator extends Actor {
 
                     } else {
 
-                        System.out.println("I received a quite message from " + message.getActor().getName());
+                        System.out.println("I received a quite message from " + message.actor().getName());
                         finished = true;
                     }
 
@@ -81,7 +86,7 @@ public class FirewallDecorator extends Actor {
         if (!getQueue().isEmpty()) {
             System.out.println("\nactor " + getName() + " list message");
             System.out.println("--------------------------------------");
-            getQueue().forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName()));
+            getQueue().forEach(m -> System.out.println(m.actor().getName() + " says " + "\"" + m.message() + "\"" + " to " + getName()));
             System.out.println("\n");
         }
     }
