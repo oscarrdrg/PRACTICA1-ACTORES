@@ -17,7 +17,7 @@ public class FirewallDecorator extends Actor {
 
     public void processMessages() {
 
-        boolean finished = false;
+        boolean finished = false, firstCommunication = false;
 
         //In case the process doesn't finish, we're still processing messages
         while (!finished) {
@@ -49,6 +49,21 @@ public class FirewallDecorator extends Actor {
                         setMessageList("This is a FirewallDecorator, it's amazing this program!");
                         Actor newActor = message.getActor();
                         newActor.send(new Message(this, getMessageFromList()));
+                        try {
+                            Thread.sleep(2000); //Sleep the Thread
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        if (!firstCommunication) {
+                            try {
+                                Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            getNextActorToConnect().send(new Message(this, "Start communication"));
+                            firstCommunication = true;
+                        }
 
                     } else {
 
@@ -63,11 +78,12 @@ public class FirewallDecorator extends Actor {
     }
 
     public void getMessages() {
-        System.out.println("\nactor " + getName() + " list message");
-        System.out.println("--------------------------------------");
-        getQueue().forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName()));
-        System.out.println("\n");
+        if (!getQueue().isEmpty()) {
+            System.out.println("\nactor " + getName() + " list message");
+            System.out.println("--------------------------------------");
+            getQueue().forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName()));
+            System.out.println("\n");
+        }
     }
-
 }
 

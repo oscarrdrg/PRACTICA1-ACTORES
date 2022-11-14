@@ -2,6 +2,7 @@ import actors.*;
 import actors.decorators.FirewallDecorator;
 import actors.proxy.ActorProxy;
 import actors.singleton.ActorContext;
+import message.Message;
 
 import java.time.LocalDate;
 
@@ -22,14 +23,23 @@ public class Main {
         //See the actors in context
         ActorContext.getActorsFromContext();
 
+        proxy.getActor().setNextActorToConnect(proxy2.getActor());
+        proxy2.getActor().setNextActorToConnect(proxy3.getActor());
+        proxy3.getActor().setNextActorToConnect(decorator.getActor());
+        decorator.getActor().setNextActorToConnect(proxy.getActor());
+
+        proxy.send(new Message(decorator.getActor(), "Start communication"));
+
+
+
         //Starting the communication
-        RingActor ringActor = new RingActor();
+        /*RingActor ringActor = new RingActor();
         ringActor.addProxies(proxy);
         ringActor.addProxies(proxy2);
         ringActor.addProxies(proxy3);
         ringActor.addProxies(decorator);
 
-        ringActor.startCommunication();
+        ringActor.startCommunication();*/
 
 
     }
