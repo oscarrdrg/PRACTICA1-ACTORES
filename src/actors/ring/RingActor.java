@@ -1,8 +1,10 @@
 package actors.ring;
-
 import actors.Actor;
 import message.Message;
 
+/**
+ * @author Oscar
+ */
 public class RingActor extends Actor {
 
     private Actor nextActorToConnect;
