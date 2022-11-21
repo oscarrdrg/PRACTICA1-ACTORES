@@ -14,7 +14,6 @@ public class Actor implements SendMessage, Runnable {
     private final String name;
     private final LinkedList<Message> queue;
 
-    private Actor nextActorToConnect;
 
     /*List of possibles messages that this actor could send to others*/
     private final LinkedList<String> messageList = new LinkedList<>();
@@ -26,17 +25,10 @@ public class Actor implements SendMessage, Runnable {
 
     }
 
-    public Actor getNextActorToConnect() {
-        return nextActorToConnect;
-    }
-
-    public void setNextActorToConnect(Actor nextActorToConnect) {
-        this.nextActorToConnect = nextActorToConnect;
-    }
 
     public void processMessages() {
 
-        boolean finished = false, firstCommunication = false;
+        boolean finished = false;
 
         //In case the process doesn't finish, we're still processing messages
         while (!finished) {
@@ -63,9 +55,9 @@ public class Actor implements SendMessage, Runnable {
                 getMessages();
                 Message message = queue.poll(); //Get the first message and delete it
                 if (message != null) {
-                    if (!message.message().equals("quite")) {
+                    if (!message.getMessage().equals("quite")) {
 
-                        Actor newActor = message.actor();
+                        Actor newActor = message.getActor();
 
                         try {
                             Thread.sleep(2000); //Sleep the Thread
@@ -79,20 +71,9 @@ public class Actor implements SendMessage, Runnable {
                             throw new RuntimeException(e);
                         }
 
-                        if (!firstCommunication) {
-                            try {
-                                Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-
-                            nextActorToConnect.send(new Message(this, "Start communication")); //We send a message to our Actor reference to start the communication
-                            firstCommunication = true; //Set first communication to true, we check that we are not going to send this message again
-                        }
-
                     } else {
 
-                        System.out.println("I received a quite message from " + message.actor().getName());
+                        System.out.println("I received a quite message from " + message.getActor().getName());
                         finished = true;
 
                     }
@@ -119,7 +100,7 @@ public class Actor implements SendMessage, Runnable {
         if (!queue.isEmpty()) {
             System.out.println("\nactor " + getName() + " list message");
             System.out.println("--------------------------------------");
-            queue.forEach(m -> System.out.println(m.actor().getName() + " says " + "\"" + m.message() + "\"" + " to " + getName()));
+            queue.forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName()));
             System.out.println("\n");
         }
     }
@@ -137,12 +118,12 @@ public class Actor implements SendMessage, Runnable {
         messageList.add("quite");
     }
 
-    protected void setMessageList(String message) {
+    public void setMessageList(String message) {
         messageList.add(message);
     }
 
     //Get a random message from messages list
-    protected String getMessageFromList() {
+    public String getMessageFromList() {
         int index = (int) (Math.random() * messageList.size());
         return messageList.get(index);
     }

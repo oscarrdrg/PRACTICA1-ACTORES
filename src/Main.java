@@ -1,6 +1,8 @@
 import actors.*;
+import actors.decorators.EncryptionDecorator;
 import actors.decorators.FirewallDecorator;
 import actors.proxy.ActorProxy;
+import actors.ring.RingActor;
 import actors.singleton.ActorContext;
 import message.Message;
 
@@ -14,11 +16,23 @@ public class Main {
 
         intro();
 
+        /* Initialize the Rings Actors*/
+        RingActor ringActor = new RingActor("Oscar");
+        RingActor ringActor2 = new RingActor("Peter");
+        RingActor ringActor3 = new RingActor("William");
+
+        /* Set the Ring Actors in the ring */
+        ringActor.setNextActorToConnect(ringActor2);
+        ringActor2.setNextActorToConnect(ringActor3);
+        ringActor3.setNextActorToConnect(ringActor);
+
+
         //Create the proxies
-        ActorProxy proxy = ActorContext.spawnActor(new Actor("Oscar"));
-        ActorProxy proxy2 = ActorContext.spawnActor(new Actor("Peter"));
-        ActorProxy proxy3 = ActorContext.spawnActor(new Actor("William"));
+        ActorProxy proxy = ActorContext.spawnActor(ringActor);
+        ActorProxy proxy2 = ActorContext.spawnActor(ringActor2);
+        ActorProxy proxy3 = ActorContext.spawnActor(ringActor3);
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
+        ActorProxy encrypt = ActorContext.spawnActor(new EncryptionDecorator(decorator.getActor()));
 
         try {
             Thread.sleep(2000); //Sleep the Thread to print well the Actors in context
@@ -29,15 +43,9 @@ public class Main {
         //See the actors in context
         ActorContext.getActorsFromContext();
 
-        //Set the Actors reference to each others
-        proxy.getActor().setNextActorToConnect(proxy2.getActor());
-        proxy2.getActor().setNextActorToConnect(proxy3.getActor());
-        proxy3.getActor().setNextActorToConnect(decorator.getActor());
-        decorator.getActor().setNextActorToConnect(proxy.getActor());
 
         //Starting the communication
-        proxy.send(new Message(decorator.getActor(), "Start communication"));
-
+        proxy.send(new Message(encrypt.getActor(), "Start Communication"));
     }
 
     public static void intro() {
