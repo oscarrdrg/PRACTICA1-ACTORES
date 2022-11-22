@@ -1,6 +1,6 @@
 import actors.decorators.EncryptionDecorator;
 import actors.decorators.FirewallDecorator;
-import actors.proxy.ActorProxy;
+import actors.proxys.ActorProxy;
 import actors.ring.RingActor;
 import actors.singleton.ActorContext;
 import message.Message;
@@ -59,5 +59,5 @@ public class StartProgram {
         System.out.println("-------------------------------------\n");
 
     }
-    
+
 }

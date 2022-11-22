@@ -11,7 +11,7 @@ public class FirewallDecorator extends Actor {
     Actor client;
 
     public FirewallDecorator(Actor client) {
-        super(client.getName() + " decorator");
+        super(client.getName() + " firewall decorator");
         this.client = client;
     }
 
@@ -28,7 +28,7 @@ public class FirewallDecorator extends Actor {
             }
             if (client.getQueue().isEmpty()) {
 
-                System.out.println("No messages to process " + client.getName());
+                System.out.println("No messages to process " + client.getName() + " firewall decorator");
                 try {
                     Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
                 } catch (InterruptedException e) {
@@ -72,7 +72,7 @@ public class FirewallDecorator extends Actor {
             }
         }
 
-        System.out.println("Thread finished " + client.getName());
+        System.out.println("Thread finished " + client.getName() + " firewall decorator");
     }
 }
 

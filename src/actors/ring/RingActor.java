@@ -24,7 +24,7 @@ public class RingActor extends Actor {
     public void processMessages() {
 
         boolean finished = false, firstCommunication = false;
-
+        Message message;
         //In case the process doesn't finish, we're still processing messages
         while (!finished) {
             try {
@@ -48,7 +48,7 @@ public class RingActor extends Actor {
                     throw new RuntimeException(e);
                 }
                 getMessages();
-                Message message = getQueue().poll(); //Get the first message and delete it
+                message = getQueue().poll(); //Get the first message and delete it
                 if (message != null) {
                     if (!message.getMessage().equals("quite")) {
 

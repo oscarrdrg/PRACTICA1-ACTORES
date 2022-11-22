@@ -31,7 +31,7 @@ public class EncryptionDecorator extends Actor {
             }
             if (client.getQueue().isEmpty()) {
 
-                System.out.println("No messages to process " + getName());
+                System.out.println("No messages to process " + client.getName() + " encryption decorator");
                 try {
                     Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
                 } catch (InterruptedException e) {
@@ -87,7 +87,7 @@ public class EncryptionDecorator extends Actor {
             }
         }
 
-        System.out.println("Thread finished " + client.getName());
+        System.out.println("Thread finished " + client.getName() + " encryption decorator");
     }
 
     /* Function that decrypt the message,
