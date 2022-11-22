@@ -14,7 +14,7 @@ public class EncryptionDecorator extends Actor {
 
     public void send(Message message) {
 
-        message.setMessage(encryptMessage(message));
+        message.setMessage(encryptMessage(message)); //Encrypt the message
         client.getQueue().add(message);
     }
 
@@ -53,7 +53,7 @@ public class EncryptionDecorator extends Actor {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    message.setMessage(decryptMessage(message.getMessage()));
+                    message.setMessage(decryptMessage(message.getMessage())); //Decrypt the message
                     try {
                         Thread.sleep(2000); //Sleep the Thread
                     } catch (InterruptedException e) {
@@ -88,6 +88,9 @@ public class EncryptionDecorator extends Actor {
         }
     }
 
+    /* Function that decrypt the message,
+    takes the message and transforms it into a character array, then subtracts 5 times the character relative
+    to the alphabet and transforms it back into a string */
     private String decryptMessage(String message) {
         char[] array = message.toCharArray();
 
@@ -98,6 +101,9 @@ public class EncryptionDecorator extends Actor {
         return String.valueOf(array);
     }
 
+    /* Function that encrypt the message,
+    takes the message and transforms it into a character array, then adds 5 times the character relative
+    to the alphabet and transforms it back into a string */
     private String encryptMessage(Message message) {
         char[] array = message.getMessage().toCharArray();
         for (int i = 0; i < array.length; i++) {
