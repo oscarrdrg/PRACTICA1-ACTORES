@@ -84,8 +84,6 @@ public class Actor implements SendMessage, Runnable {
         }
 
         System.out.println("Thread finished " + getName());
-
-
     }
 
     public void send(Message message) {

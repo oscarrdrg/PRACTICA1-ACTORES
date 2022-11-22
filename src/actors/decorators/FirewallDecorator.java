@@ -71,6 +71,8 @@ public class FirewallDecorator extends Actor {
 
             }
         }
+
+        System.out.println("Thread finished " + client.getName());
     }
 }
 

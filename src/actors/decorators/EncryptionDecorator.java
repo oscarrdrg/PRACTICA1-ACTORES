@@ -86,6 +86,8 @@ public class EncryptionDecorator extends Actor {
 
             }
         }
+
+        System.out.println("Thread finished " + client.getName());
     }
 
     /* Function that decrypt the message,
