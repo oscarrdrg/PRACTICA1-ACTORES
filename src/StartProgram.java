@@ -1,9 +1,12 @@
+import actors.InsultActor;
 import actors.decorators.EncryptionDecorator;
 import actors.decorators.FirewallDecorator;
 import actors.proxys.ActorProxy;
+import actors.proxys.DynamicProxy;
 import actors.ring.RingActor;
 import actors.singleton.ActorContext;
 import message.Message;
+import services.InsultService;
 
 import java.time.LocalDate;
 
@@ -14,10 +17,14 @@ public class StartProgram {
 
     public static void startProgram() {
 
-        /* Initialize the Rings Actors*/
+        /* Initialize the Rings Actors */
         RingActor ringActor = new RingActor("Oscar");
         RingActor ringActor2 = new RingActor("Peter");
         RingActor ringActor3 = new RingActor("William");
+
+        ActorProxy insult = ActorContext.spawnActor(new InsultActor("Prueba"));
+        InsultService service = (InsultService) DynamicProxy.newInstance(insult);
+        service.getInsult();
 
         /* Set the Ring Actors in the ring */
         ringActor.setNextActorToConnect(ringActor2);
