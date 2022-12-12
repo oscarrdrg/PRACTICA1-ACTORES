@@ -22,15 +22,10 @@ public class StartProgram {
         RingActor ringActor2 = new RingActor("Peter");
         RingActor ringActor3 = new RingActor("William");
 
-        ActorProxy insult = ActorContext.spawnActor(new InsultActor("Prueba"));
-        InsultService service = (InsultService) DynamicProxy.newInstance(insult);
-        service.getInsult();
-
         /* Set the Ring Actors in the ring */
         ringActor.setNextActorToConnect(ringActor2);
         ringActor2.setNextActorToConnect(ringActor3);
         ringActor3.setNextActorToConnect(ringActor);
-
 
         //Create the proxies
         ActorProxy proxy = ActorContext.spawnActor(ringActor);
@@ -38,6 +33,10 @@ public class StartProgram {
         ActorProxy proxy3 = ActorContext.spawnActor(ringActor3);
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
         ActorProxy encrypt = ActorContext.spawnActor(new EncryptionDecorator(decorator.getActor()));
+
+        /*ActorProxy insult = ActorContext.spawnActor(new InsultActor("Prove"));
+        InsultService service = (InsultService) DynamicProxy.newInstance(new InsultService(), insult);
+        service.getInsult();*/
 
         try {
             Thread.sleep(2000); //Sleep the Thread to print well the Actors in context
@@ -50,7 +49,7 @@ public class StartProgram {
 
 
         //Starting the communication
-        proxy.send(new Message(encrypt.getActor(), "Start Communication"));
+        encrypt.send(new Message(proxy2.getActor(), "Start Communication"));
 
     }
 

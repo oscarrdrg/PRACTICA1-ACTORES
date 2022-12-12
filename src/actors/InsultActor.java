@@ -34,6 +34,9 @@ public class InsultActor extends Actor {
         return list;
     }
 
-
-
+    public String processMessage() {
+        if (getQueue() != null) {
+            return getInsultMessage();
+        } else return null;
+    }
 }

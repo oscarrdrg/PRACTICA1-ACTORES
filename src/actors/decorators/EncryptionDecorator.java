@@ -15,7 +15,7 @@ public class EncryptionDecorator extends Actor {
     public void send(Message message) {
 
         message.setMessage(encryptMessage(message)); //Encrypt the message
-        client.getQueue().add(message);
+        client.send(message);
     }
 
     public void processMessages() {
@@ -69,7 +69,7 @@ public class EncryptionDecorator extends Actor {
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
-                        newActor.send(new Message(this, getMessageFromList()));
+                        newActor.send(new Message(client, getMessageFromList()));
                         try {
                             Thread.sleep(2000); //Sleep the Thread
                         } catch (InterruptedException e) {

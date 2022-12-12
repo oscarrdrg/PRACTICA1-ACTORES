@@ -15,6 +15,11 @@ public class FirewallDecorator extends Actor {
         this.client = client;
     }
 
+    public void send(Message message) {
+        client.send(message);
+    }
+
+
     public void processMessages() {
 
         boolean finished = false;
@@ -54,7 +59,7 @@ public class FirewallDecorator extends Actor {
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
-                        newActor.send(new Message(this, client.getMessageFromList()));
+                        newActor.send(new Message(client, client.getMessageFromList()));
                         try {
                             Thread.sleep(2000); //Sleep the Thread
                         } catch (InterruptedException e) {
