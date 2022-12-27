@@ -8,6 +8,7 @@ import actors.singleton.ActorContext;
 import interfaces.InsultService;
 import message.Message;
 import services.InsultServiceImpl;
+import services.MonitorService;
 
 import java.time.LocalDate;
 
@@ -18,6 +19,7 @@ public class StartProgram {
 
     public static void startProgram() {
 
+        MonitorService monitorService = new MonitorService();
         /* Initialize the Rings Actors */
         RingActor ringActor = new RingActor("Oscar");
         RingActor ringActor2 = new RingActor("Peter");
@@ -29,14 +31,20 @@ public class StartProgram {
         ringActor3.setNextActorToConnect(ringActor);
 
         //Create the proxies
-        ActorProxy proxy = ActorContext.spawnActor(ringActor);
-        ActorProxy proxy2 = ActorContext.spawnActor(ringActor2);
-        ActorProxy proxy3 = ActorContext.spawnActor(ringActor3);
-        ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
-        ActorProxy encrypt = ActorContext.spawnActor(new EncryptionDecorator(decorator.getActor()));
+        ActorProxy proxy = ActorContext.spawnActor(ringActor, monitorService);
+        monitorService.addObservers(proxy);
+        ActorProxy proxy2 = ActorContext.spawnActor(ringActor2, monitorService);
+        monitorService.addObservers(proxy2);
+        ActorProxy proxy3 = ActorContext.spawnActor(ringActor3, monitorService);
+        monitorService.addObservers(proxy3);
+        ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()), monitorService);
+        ActorProxy encrypt = ActorContext.spawnActor(new EncryptionDecorator(decorator.getActor()), monitorService);
 
-        ActorProxy insult = ActorContext.spawnActor(new InsultActor("Prove"));
+        ActorProxy insult = ActorContext.spawnActor(new InsultActor("Prove"), monitorService);
         InsultService service = (InsultService) DynamicProxy.newInstance(new InsultServiceImpl(), insult);
+
+
+
         service.getInsult();
 
         try {

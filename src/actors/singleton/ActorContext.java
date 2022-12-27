@@ -2,6 +2,7 @@ package actors.singleton;
 
 import actors.Actor;
 import actors.proxys.ActorProxy;
+import services.MonitorService;
 
 import java.util.HashMap;
 
@@ -14,14 +15,14 @@ public class ActorContext {
 
     /*In this function we create a proxy of an Actor reference,
     this will allow us to receive and send messages from other actors.*/
-    public static ActorProxy spawnActor(Actor actor) {
+    public static ActorProxy spawnActor(Actor actor, MonitorService service) {
 
         /*We put the actor name as a key, and actor reference as a value in HashMap List
         to keep all the actor whose are running at the system*/
 
         addActorToList(actor.getName(), actor); //Call the function AddToList
 
-        ActorProxy newActorProxy = new ActorProxy(actor.getName());
+        ActorProxy newActorProxy = new ActorProxy(actor.getName(), service);
         newActorProxy.setActor(actor); //Set the Actor reference to the proxy
 
         Thread thread = new Thread(newActorProxy.getActor()); //Create Thread
