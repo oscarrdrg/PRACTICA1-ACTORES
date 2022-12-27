@@ -5,8 +5,9 @@ import actors.proxys.ActorProxy;
 import actors.proxys.DynamicProxy;
 import actors.ring.RingActor;
 import actors.singleton.ActorContext;
+import interfaces.InsultService;
 import message.Message;
-import services.InsultService;
+import services.InsultServiceImpl;
 
 import java.time.LocalDate;
 
@@ -35,7 +36,7 @@ public class StartProgram {
         ActorProxy encrypt = ActorContext.spawnActor(new EncryptionDecorator(decorator.getActor()));
 
         ActorProxy insult = ActorContext.spawnActor(new InsultActor("Prove"));
-        InsultService service = (InsultService) DynamicProxy.newInstance(new InsultService(), insult);
+        InsultService service = (InsultService) DynamicProxy.newInstance(new InsultServiceImpl(), insult);
         service.getInsult();
 
         try {

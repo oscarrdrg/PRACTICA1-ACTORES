@@ -4,6 +4,7 @@ import interfaces.Observer;
 
 public class MonitorService implements Observer {
 
+    //lista de observers
     private int messageTraffic;
     @Override
     public void creation() {

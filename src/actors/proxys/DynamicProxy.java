@@ -1,6 +1,8 @@
 package actors.proxys;
 
+import interfaces.InsultService;
 import message.Message;
+import services.InsultServiceImpl;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -24,18 +26,15 @@ public class DynamicProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-        if (Object.class == method.getDeclaringClass()) {
             String name = method.getName();
 
             if ("getInsult".equals(name)) {
-                proxy.getActor().send(new Message(proxy.getActor(), method.getName()));
+                proxy.getActor().send(new Message(proxy.getActor(), ((InsultServiceImpl) this.target).getInsult()));
             }
-            if ("getInsults".equals(name)) {
+            if ("getAllInsults".equals(name)) {
 
                 proxy.getActor().getMessages();
             }
-
-        }
         return null;
     }
 }

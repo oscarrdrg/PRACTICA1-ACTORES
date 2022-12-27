@@ -1,12 +1,14 @@
 package services;
 
+import interfaces.InsultService;
+
 import java.util.LinkedList;
 
-public class InsultService {
+public class InsultServiceImpl implements InsultService {
 
     LinkedList<String> insultList = new LinkedList<>();
 
-    public InsultService() {
+    public InsultServiceImpl() {
         loadList();
     }
 
@@ -19,6 +21,7 @@ public class InsultService {
     public void addInsult(String insult){
         insultList.add(insult);
     }
+
     public LinkedList<String> getAllInsults(){
         return insultList;
     }
