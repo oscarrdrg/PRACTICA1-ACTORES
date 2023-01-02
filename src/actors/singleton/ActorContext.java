@@ -15,15 +15,18 @@ public class ActorContext {
 
     /*In this function we create a proxy of an Actor reference,
     this will allow us to receive and send messages from other actors.*/
-    public static ActorProxy spawnActor(Actor actor, MonitorService service) {
+    public static ActorProxy spawnActor(Actor actor) {
 
         /*We put the actor name as a key, and actor reference as a value in HashMap List
         to keep all the actor whose are running at the system*/
 
         addActorToList(actor.getName(), actor); //Call the function AddToList
 
-        ActorProxy newActorProxy = new ActorProxy(actor.getName(), service);
+        ActorProxy newActorProxy = new ActorProxy(actor.getName());
         newActorProxy.setActor(actor); //Set the Actor reference to the proxy
+
+        if (actor.getMonitorService() != null) actor.getMonitorService().notifyMessage("Creation");
+
 
         Thread thread = new Thread(newActorProxy.getActor()); //Create Thread
         thread.start(); //We start the thread that will process the messages

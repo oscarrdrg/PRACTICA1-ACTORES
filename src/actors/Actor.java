@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import interfaces.SendMessage;
 import message.Message;
+import services.MonitorService;
 
 /**
  * @author Oscar
@@ -12,8 +13,8 @@ import message.Message;
 public class Actor implements SendMessage, Runnable {
 
     private final String name;
+    private MonitorService monitorService;
     private final LinkedList<Message> queue;
-
 
     /*List of possibles messages that this actor could send to others*/
     private final LinkedList<String> messageList = new LinkedList<>();
@@ -22,9 +23,15 @@ public class Actor implements SendMessage, Runnable {
         this.name = name;
         queue = new LinkedList<>();
         loadListMessages(); //Load the messages list
-
     }
 
+    public MonitorService getMonitorService() {
+        return monitorService;
+    }
+
+    public void setMonitorService(MonitorService monitorService) {
+        this.monitorService = monitorService;
+    }
 
     public void processMessages() {
 
@@ -75,6 +82,7 @@ public class Actor implements SendMessage, Runnable {
 
                         System.out.println("I received a quite message from " + message.getActor().getName());
                         finished = true;
+                        if (getMonitorService() != null) getMonitorService().notifyMessage("Finalization");
 
                     }
 

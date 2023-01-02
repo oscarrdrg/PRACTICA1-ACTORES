@@ -4,7 +4,6 @@ import actors.Actor;
 import interfaces.Observer;
 import interfaces.SendMessage;
 import message.Message;
-import services.MonitorService;
 
 /**
  * @author Oscar
@@ -14,12 +13,9 @@ public class ActorProxy implements SendMessage, Observer {
     /*It's important to mention that we don't really need the Actor functions
     so for that reason is better get an Actor reference than extend of an Actor Class */
     Actor actor; //Reference to actor
-    MonitorService service;
 
-    public ActorProxy(String name, MonitorService service) {
+    public ActorProxy(String name) {
         actor = new Actor(name);
-        this.service = service;
-        service.notifyMessage("Creation");
 
     }
 
