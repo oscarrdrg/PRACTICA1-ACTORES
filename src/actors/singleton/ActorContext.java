@@ -47,6 +47,10 @@ public class ActorContext {
         actorList.put(name, actor);
     }
 
+    public static HashMap<String, Actor> getActorList() {
+        return actorList;
+    }
+
     public static void getActorsFromContext() {
         System.out.println("\nlist of actors in the system:");
         System.out.println("-------------------------------");

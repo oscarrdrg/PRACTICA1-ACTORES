@@ -1,12 +1,18 @@
+import javax.swing.*;
+
 /**
  * @author Oscar
  */
 public class Main {
     public static void main(String[] args) {
 
-        /* We call the static functions of the StartProgram Class to generate clean code */
-        StartProgram.intro();
-        StartProgram.startProgram();
-
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFrame frame = new StartWindow();
+                frame.setSize(300, 300);
+                frame.setVisible(true);
+            }
+        });
     }
 }

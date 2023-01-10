@@ -33,6 +33,7 @@ public class StartProgram {
         ringActor.setMonitorService(monitorService);
         ringActor2.setMonitorService(monitorService);
         ringActor3.setMonitorService(monitorService);
+
         //Create the proxies
         ActorProxy proxy = ActorContext.spawnActor(ringActor);
         monitorService.addObservers(proxy);
