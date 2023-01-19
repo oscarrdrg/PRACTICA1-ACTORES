@@ -1,6 +1,7 @@
 package actors.decorators;
 
 import actors.Actor;
+import actors.singleton.ActorContext;
 import message.Message;
 
 /**
@@ -12,6 +13,7 @@ public class FirewallDecorator extends Actor {
 
     public FirewallDecorator(Actor client) {
         super(client.getName() + " firewall decorator");
+        client.setMessageList("Hello from Firewall Decorator");
         this.client = client;
     }
 
@@ -20,64 +22,13 @@ public class FirewallDecorator extends Actor {
     }
 
 
-    public void processMessages() {
-
-        boolean finished = false;
-
-        //In case the process doesn't finish, we're still processing messages
-        while (!finished) {
-            try {
-                Thread.sleep(2000); //Sleep the Thread
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            if (client.getQueue().isEmpty()) {
-
-                System.out.println("No messages to process " + client.getName() + " firewall decorator");
-                try {
-                    Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-            } else {
-                try {
-                    Thread.sleep(2000); //Sleep the Thread
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                client.getMessages();
-                Message message = client.getQueue().poll(); //Get the first message and delete it
-                if (message != null) {
-                    if (!message.getMessage().equals("quite")) {
-
-                        client.setMessageList("This is a FirewallDecorator, it's amazing this program!");
-                        Actor newActor = message.getActor();
-
-                        try {
-                            Thread.sleep(2000); //Sleep the Thread
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        newActor.send(new Message(client, client.getMessageFromList()));
-                        try {
-                            Thread.sleep(2000); //Sleep the Thread
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                    } else {
-
-                        System.out.println("I received a quite message from " + message.getActor().getName());
-                        finished = true;
-                    }
-
-                }
-
-            }
+    public void processMessages(Message message) {
+        if (ActorContext.getActorList().containsKey(message.getActor().getName()))
+            client.processMessages(message);
+        else {
+            Actor newActor = message.getActor();
+            newActor.send(new Message(this, "Communication error, you cannot access this actor"));
         }
-
-        System.out.println("Thread finished " + client.getName() + " firewall decorator");
     }
 }
 

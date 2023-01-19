@@ -28,8 +28,9 @@ public class DynamicProxy implements InvocationHandler {
     public Object invoke(Object target, Method method, Object[] args) throws Throwable {
             String name = method.getName();
 
+
             if ("getInsult".equals(name)) {
-                proxy.getActor().send(new Message(proxy.getActor(), ((InsultServiceImpl) this.target).getInsult()));
+                proxy.send(new Message(proxy.getActor(), ((InsultServiceImpl) this.target).getInsult()));
             }
             if ("getAllInsults".equals(name)) {
 

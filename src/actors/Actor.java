@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import interfaces.SendMessage;
 import message.Message;
+import process_messages.ProcessMessages;
 import services.MonitorService;
 
 /**
@@ -15,6 +16,8 @@ public class Actor implements SendMessage, Runnable {
     private final String name;
     private MonitorService monitorService;
     private final LinkedList<Message> queue;
+
+    private ProcessMessages process = new ProcessMessages();
 
     /*List of possibles messages that this actor could send to others*/
     private final LinkedList<String> messageList = new LinkedList<>();
@@ -33,66 +36,23 @@ public class Actor implements SendMessage, Runnable {
         this.monitorService = monitorService;
     }
 
-    public void processMessages() {
+    public void processMessages(Message message) {
 
-        boolean finished = false;
-
-        //In case the process doesn't finish, we're still processing messages
-        while (!finished) {
-            try {
-                Thread.sleep(2000); //Sleep the Thread
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            if (queue.isEmpty()) {
-
-                System.out.println("No messages to process: " + getName());
-                try {
-                    Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-            } else {
-                try {
-                    Thread.sleep(2000); //Sleep the Thread
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                getMessages();
-                Message message = queue.poll(); //Get the first message and delete it
-                if (message != null) {
-                    if (!message.getMessage().equals("quite")) {
-
-                        Actor newActor = message.getActor();
-
-                        try {
-                            Thread.sleep(2000); //Sleep the Thread
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        newActor.send(new Message(this, getMessageFromList()));
-                        try {
-                            Thread.sleep(2000); //Sleep the Thread
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                    } else {
-
-                        System.out.println("I received a quite message from " + message.getActor().getName());
-                        finished = true;
-                        if (getMonitorService() != null) getMonitorService().notifyMessage("Finalization");
-
-                    }
-
-                }
-
-            }
+        Actor newActor = message.getActor();
+        try {
+            Thread.sleep(2000); //Sleep the Thread
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        newActor.send(new Message(this, getMessageFromList()));
+        try {
+            Thread.sleep(2000); //Sleep the Thread
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
-        System.out.println("Thread finished " + getName());
     }
+
 
     public void send(Message message) {
         queue.add(message);
@@ -134,10 +94,13 @@ public class Actor implements SendMessage, Runnable {
         return messageList.get(index);
     }
 
+    public LinkedList<String> getMessageList() {
+        return messageList;
+    }
 
     //Function run(Start) Thread
     @Override
     public void run() {
-        processMessages(); //Call the function which process the messages
+        process.processMessage(this); //Call the function which process the messages
     }
 }

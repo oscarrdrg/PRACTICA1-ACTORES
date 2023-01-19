@@ -1,9 +1,10 @@
-import actors.singleton.ActorContext;
+package views;
+
+import controllers.StartController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 
 public class StartWindow extends JFrame{
     private JPanel panel1;
@@ -14,27 +15,24 @@ public class StartWindow extends JFrame{
 
     public StartWindow(){
         setContentPane(panel1);
+        StartController controller = new StartController();
         startProgramButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                StartProgram.intro();
-                StartProgram.startProgram();
+                controller.start();
             }
         });
         actorsInContextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LinkedList<String> actorsContext = new LinkedList<>();
-                ActorContext.getActorList().forEach((k, v) -> actorsContext.add(k));
-                if(actorsContext.isEmpty())  JOptionPane.showMessageDialog(null, "No actors in Actor Context");
-                else JOptionPane.showMessageDialog(null, actorsContext);
+
+              JOptionPane.showMessageDialog(null, controller.actorsContext());
             }
         });
         salirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
-                System.exit(0);
+                controller.exit();
             }
         });
         createActorButton.addActionListener(new ActionListener() {

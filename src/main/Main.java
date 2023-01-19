@@ -1,3 +1,7 @@
+package main;
+
+import views.StartWindow;
+
 import javax.swing.*;
 
 /**

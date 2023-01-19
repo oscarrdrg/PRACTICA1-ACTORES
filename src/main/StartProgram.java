@@ -1,3 +1,6 @@
+package main;
+
+import actors.Actor;
 import actors.InsultActor;
 import actors.decorators.EncryptionDecorator;
 import actors.decorators.FirewallDecorator;
@@ -20,6 +23,8 @@ public class StartProgram {
     public static void startProgram() {
 
         MonitorService monitorService = new MonitorService();
+        Actor hacker = new Actor("Hacker");
+
         /* Initialize the Rings Actors */
         RingActor ringActor = new RingActor("Oscar");
         RingActor ringActor2 = new RingActor("Peter");
@@ -62,7 +67,7 @@ public class StartProgram {
 
 
         //Starting the communication
-        encrypt.send(new Message(proxy2.getActor(), "Start Communication"));
+        encrypt.send(new Message(hacker, "Start Communication"));
 
     }
 
