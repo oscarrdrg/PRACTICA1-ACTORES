@@ -37,7 +37,6 @@ public class Actor implements SendMessage, Runnable {
     }
 
     public void processMessages(Message message) {
-
         Actor newActor = message.getActor();
         try {
             Thread.sleep(2000); //Sleep the Thread

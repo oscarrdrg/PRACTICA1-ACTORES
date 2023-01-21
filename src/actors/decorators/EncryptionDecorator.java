@@ -3,6 +3,8 @@ package actors.decorators;
 import actors.Actor;
 import message.Message;
 
+import java.sql.SQLOutput;
+
 public class EncryptionDecorator extends Actor {
 
     Actor client;
@@ -15,13 +17,13 @@ public class EncryptionDecorator extends Actor {
     public void send(Message message) {
 
         message.setMessage(encryptMessage(message)); //Encrypt the message
-        client.send(message);
+        getQueue().add(message);
     }
 
     public void processMessages(Message message) {
+        System.out.println("HE LLEGADO AL ENCRYPT");
         message.setMessage(decryptMessage(message.getMessage()));
-        client.processMessages(message);
-
+        client.send((message));
     }
 
     /* Function that decrypt the message,

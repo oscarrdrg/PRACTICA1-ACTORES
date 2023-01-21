@@ -4,7 +4,8 @@ import actors.Actor;
 import message.Message;
 
 public class ProcessMessages {
-    public ProcessMessages() {}
+    public ProcessMessages() {
+    }
 
     public void processMessage(Actor actor) {
         boolean finished = false;
@@ -25,24 +26,27 @@ public class ProcessMessages {
                     throw new RuntimeException(e);
                 }
 
-            }
-            try {
-                Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            actor.getMessages();
-            Message message = actor.getQueue().poll();//Get the first message and delete it
-            if (message != null) {
-                if (!message.getMessage().equals("quite")) {
-                    actor.processMessages(message);
-                } else {
-                    System.out.println("I received a quite message from " + message.getActor().getName());
-                    finished = true;
-                    if (actor.getMonitorService() != null) actor.getMonitorService().notifyMessage("Finalization");
+            } else {
+                try {
+                    Thread.sleep(2000); //Sleep the Thread to process messages in case queue is empty
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                actor.getMessages();
+                Message message = actor.getQueue().poll();//Get the first message and delete it
+                if (message != null) {
+                    if (!message.getMessage().equals("quite")) {
+                        actor.processMessages(message);
+                    } else {
+                        System.out.println("I received a quite message from " + message.getActor().getName());
+                        finished = true;
+                        if (actor.getMonitorService() != null) actor.getMonitorService().notifyMessage("Finalization");
+                    }
+
                 }
 
             }
+
         }
 
     }

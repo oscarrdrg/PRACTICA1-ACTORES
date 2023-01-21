@@ -18,13 +18,16 @@ public class FirewallDecorator extends Actor {
     }
 
     public void send(Message message) {
-        client.send(message);
+        getQueue().add(message);
     }
 
 
     public void processMessages(Message message) {
-        if (ActorContext.getActorList().containsKey(message.getActor().getName()))
-            client.processMessages(message);
+        if (ActorContext.getActorList().containsKey(message.getActor().getName())){
+            client.send(message);
+            System.out.println("HE LLEGADO AL FIREWALL ");
+        }
+
         else {
             Actor newActor = message.getActor();
             newActor.send(new Message(this, "Communication error, you cannot access this actor"));

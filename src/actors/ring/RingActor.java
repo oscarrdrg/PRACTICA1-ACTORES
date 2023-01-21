@@ -24,7 +24,6 @@ public class RingActor extends Actor {
     }
 
     public void processMessages(Message message) {
-
         Actor newActor = message.getActor();
 
         try {

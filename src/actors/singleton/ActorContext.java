@@ -2,7 +2,6 @@ package actors.singleton;
 
 import actors.Actor;
 import actors.proxys.ActorProxy;
-import services.MonitorService;
 
 import java.util.HashMap;
 
@@ -49,6 +48,10 @@ public class ActorContext {
 
     public static HashMap<String, Actor> getActorList() {
         return actorList;
+    }
+
+    public static Actor getActorFromList(String name){
+        return actorList.get(name);
     }
 
     public static void getActorsFromContext() {

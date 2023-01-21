@@ -12,11 +12,11 @@ public class LambdaDecorator extends Actor {
     }
 
     public void send(Message message) {
-        client.send(message);
+        getQueue().add(message);
     }
 
     public void processMessages(Message message) {
         //hacer algo
-        client.processMessages(message);
+        client.send(message);
     }
 }

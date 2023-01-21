@@ -12,6 +12,7 @@ public class StartWindow extends JFrame{
     private JButton actorsInContextButton;
     private JButton salirButton;
     private JButton createActorButton;
+    private JButton actorActionsButton;
 
     public StartWindow(){
         setContentPane(panel1);
@@ -46,6 +47,20 @@ public class StartWindow extends JFrame{
                         frame.setVisible(true);
                     }
                 });
+            }
+        });
+        actorActionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        JFrame frame = new ActorActions();
+                        frame.setSize(300, 300);
+                        frame.setVisible(true);
+                    }
+                });
+
             }
         });
     }
