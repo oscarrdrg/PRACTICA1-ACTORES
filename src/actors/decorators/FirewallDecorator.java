@@ -20,9 +20,9 @@ public class FirewallDecorator extends Actor {
     public void send(Message message) {
         if (ActorContext.getActorList().containsKey(message.getActor().getName())){
             System.out.println(message.getMessage());
-            System.out.println("Approved access from FirewallDecorator ");
+            System.out.println("Approved access from FirewallDecorator");
             client.send(message);
-        }
+        }else System.out.println("Access denied");
     }
 
     public void processMessages(Message message) {

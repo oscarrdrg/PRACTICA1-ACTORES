@@ -1,6 +1,7 @@
 package actors.decorators;
 
 import actors.Actor;
+import message.ClosureMessage;
 import message.Message;
 
 import java.util.LinkedList;
@@ -16,9 +17,8 @@ public class LambdaDecorator extends Actor {
     }
 
     public void send(Message message) {
-        //comprobar si es tipo closure y guardar en la lista el predciado -> infanceof
-        //si no es, comprobar ->test predicade.test false no envia
-        client.send(message);
+        if(message instanceof ClosureMessage) list.add(m -> m.getMessage().equals("How are you?"));
+        list.forEach(messagePredicate -> {if (messagePredicate.test(message)==true) client.send(message);});
     }
 
     public void processMessages(Message message) {

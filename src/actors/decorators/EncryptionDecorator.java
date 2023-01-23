@@ -20,9 +20,8 @@ public class EncryptionDecorator extends Actor {
     }
 
     public void processMessages(Message message) {
-        System.out.println("HE LLEGADO AL ENCRYPT");
         message.setMessage(decryptMessage(message.getMessage()));
-        client.processMessages((message));
+        client.processMessages(message);
     }
 
     /* Function that decrypt the message,
