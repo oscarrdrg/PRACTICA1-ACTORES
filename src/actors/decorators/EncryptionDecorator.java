@@ -15,15 +15,14 @@ public class EncryptionDecorator extends Actor {
     }
 
     public void send(Message message) {
-
         message.setMessage(encryptMessage(message)); //Encrypt the message
-        getQueue().add(message);
+        client.send(message);
     }
 
     public void processMessages(Message message) {
         System.out.println("HE LLEGADO AL ENCRYPT");
         message.setMessage(decryptMessage(message.getMessage()));
-        client.send((message));
+        client.processMessages((message));
     }
 
     /* Function that decrypt the message,

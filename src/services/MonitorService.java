@@ -1,6 +1,8 @@
 package services;
 
 import actors.Actor;
+import actors.observer.ActorListener;
+import actors.singleton.ActorContext;
 import interfaces.Observer;
 import message.Message;
 
@@ -10,39 +12,18 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class MonitorService {
+public class MonitorService{
 
-    private static final LinkedList<Observer> observerList =  new LinkedList<>();
-    private static final LinkedList<Actor> actorMonitorList = new LinkedList();
-
-    public static void addObservers(Observer o) {
-        observerList.add(o);
-    }
-
+    private static final ActorListener listener = new ActorListener("Listener");
+    private static final LinkedList<String> actorMonitorList = new LinkedList();
     public static void addActorsMonitor(Actor a) {
-        actorMonitorList.add(a);
-    }
-
-    public static void removeObservers(Observer o) {
-        observerList.remove(o);
-    }
-
-
-    public static LinkedList<Observer> getObserverList() {
-        return observerList;
-    }
-
-    public static void setObserverList(LinkedList<Observer> observerList) {
-        observerList = observerList;
-    }
-
-    public static LinkedList<Actor> getActorMonitorList() {
-        return actorMonitorList;
+        actorMonitorList.add(a.getName());
     }
 
     public static Actor getActorFromMonitorService(String name) {
-        List<Actor> actorInList = actorMonitorList.stream().filter(actor -> actor.getName().equals(name)).collect(Collectors.toList());
-        return actorInList.get(0);
+        List<String> actorInList = actorMonitorList.stream().filter(actorName -> actorName.equals(name)).collect(Collectors.toList());
+        String actorName = actorInList.get(0);
+        return ActorContext.getActorFromList(actorName);
     }
 
     public static String getTraffic(Actor actor) {
@@ -67,22 +48,21 @@ public class MonitorService {
         return null;
     }
 
-    public static void notifyMessage(String message) {
+    public static void notifyMessage(String message, Actor actor) {
         switch (message) {
             case "Creation":
-                observerList.forEach(o -> o.creation());
+                listener.creation(actor);
                 break;
             case "Finalization":
-                observerList.forEach(o -> o.finalization());
+                listener.finalization(actor);
                 break;
             case "Incorrect Finalization":
-                observerList.forEach(o -> o.incorrect_finalization());
+                listener.incorrect_finalization(actor);
                 break;
             case "Message Received":
-                observerList.forEach(o -> o.received_message());
+                listener.received_message(actor);
                 break;
         }
-
 
     }
 

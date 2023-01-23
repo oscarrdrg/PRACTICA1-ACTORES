@@ -8,19 +8,32 @@ import message.Message;
 /**
  * @author Oscar
  */
-public class ActorProxy implements SendMessage, Observer {
+public class ActorProxy implements SendMessage {
 
     /*It's important to mention that we don't really need the Actor functions
     so for that reason is better get an Actor reference than extend of an Actor Class */
     Actor actor; //Reference to actor
+    ActorProxyExtended actorProxyExtended;
 
     public ActorProxy(String name) {
         actor = new Actor(name);
-
     }
 
     public void send(Message message) {
+        if(actorProxyExtended!=null) actorProxyExtended.send(message);
         actor.send(message); //Call the function "send" of the Actor reference to add those messages in his queue
+    }
+
+    public String receive(){
+        actorProxyExtended.getMessageLinkedList().poll();
+        return actor.getMessageFromList();
+    }
+    public ActorProxyExtended getActorProxyExtended() {
+        return actorProxyExtended;
+    }
+
+    public void setActorProxyExtended(ActorProxyExtended actorProxyExtended) {
+        this.actorProxyExtended = actorProxyExtended;
     }
 
     public Actor getActor() {
@@ -31,23 +44,4 @@ public class ActorProxy implements SendMessage, Observer {
         this.actor = actor;
     }
 
-    @Override
-    public void creation() {
-        System.out.println("Actor " + getActor().getName() + " created");
-    }
-
-    @Override
-    public void finalization() {
-        System.out.println("Actor " + getActor().getName() + " finalized");
-    }
-
-    @Override
-    public void incorrect_finalization() {
-
-    }
-
-    @Override
-    public void received_message() {
-        System.out.println("Actor " + getActor().getName() + " has received a message");
-    }
 }

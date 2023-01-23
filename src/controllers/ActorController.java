@@ -30,7 +30,7 @@ public class ActorController {
 
     public ArrayList<String> getMessagesFromController(String name) {
         Actor actor = ActorContext.getActorFromList(name);
-        if (MonitorService.getActorMonitorList().contains(actor)) return MonitorService.getActorMessages(actor);
+        if (MonitorService.getActorFromMonitorService(name) != null) return MonitorService.getActorMessages(actor);
         else {
             ArrayList<String> list = new ArrayList<>();
             list.add("No actor in Monitor Service");
@@ -42,7 +42,7 @@ public class ActorController {
 
     public String getTrafficFromActor(String name) {
         Actor actor = ActorContext.getActorFromList(name);
-        if (!MonitorService.getActorMonitorList().contains(actor)) return "No actor in Monitor Service";
+        if (MonitorService.getActorFromMonitorService(name) == null) return "No actor in Monitor Service";
         else return MonitorService.getTraffic(actor);
     }
 }

@@ -5,11 +5,13 @@ import actors.InsultActor;
 import actors.decorators.EncryptionDecorator;
 import actors.decorators.FirewallDecorator;
 import actors.proxys.ActorProxy;
+import actors.proxys.ActorProxyExtended;
 import actors.proxys.DynamicProxy;
 import actors.ring.RingActor;
 import actors.singleton.ActorContext;
 import interfaces.InsultService;
 import message.Message;
+import message.MessageMain;
 import services.InsultServiceImpl;
 import services.MonitorService;
 
@@ -35,12 +37,11 @@ public class StartProgram {
 
         //Create the proxies
         ActorProxy proxy = ActorContext.spawnActor(ringActor);
-        MonitorService.addObservers(proxy);
         ActorProxy proxy2 = ActorContext.spawnActor(ringActor2);
-        MonitorService.addObservers(proxy2);
         ActorProxy proxy3 = ActorContext.spawnActor(ringActor3);
-        MonitorService.addObservers(proxy3);
         ActorProxy proxy4 = ActorContext.spawnActor(hello_world_actor);
+
+        /*Decorators*/
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
         ActorProxy encrypt = ActorContext.spawnActor(new EncryptionDecorator(decorator.getActor()));
 
@@ -50,10 +51,18 @@ public class StartProgram {
         ringActor2.setNextActorToConnect(ringActor3);
         ringActor3.setNextActorToConnect(ringActor);
 
-        /*Dynamic proxy, invoke*/
-        ActorProxy insult = ActorContext.spawnActor(new InsultActor("Prove"));
+        /*Receive prove*/
+        ActorProxy insult = ActorContext.spawnActor(new InsultActor("InsultActor"));
+        ActorProxyExtended actorProxyExtended = new ActorProxyExtended("Extended");
+        insult.setActorProxyExtended(actorProxyExtended);
+        insult.send(new MessageMain(("Hello from Main")));
+        String message = insult.receive();
+        System.out.println("\nMain message, receive is working well -> " + message);
+
+
         InsultService service = (InsultService) DynamicProxy.newInstance(new InsultServiceImpl(), insult);
-        service.getInsult();
+        service.addInsult("Gilipollas");
+        System.out.println(service.getAllInsults());
 
         try {
             Thread.sleep(2000); //Sleep the Thread to print well the Actors in context

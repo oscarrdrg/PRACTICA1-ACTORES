@@ -11,13 +11,11 @@ import services.MonitorService;
  * @author Oscar
  */
 
-public class Actor implements SendMessage, Runnable {
+public class Actor implements SendMessage {
 
     private final String name;
     private MonitorService monitorService;
     private final LinkedList<Message> queue;
-
-    private ProcessMessages process = new ProcessMessages();
 
     /*List of possibles messages that this actor could send to others*/
     private final LinkedList<String> messageList = new LinkedList<>();
@@ -43,7 +41,7 @@ public class Actor implements SendMessage, Runnable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        newActor.send(new Message(this, getMessageFromList()));
+        if (newActor != null) newActor.send(new Message(this, getMessageFromList()));
         try {
             Thread.sleep(2000); //Sleep the Thread
         } catch (InterruptedException e) {
@@ -52,8 +50,8 @@ public class Actor implements SendMessage, Runnable {
 
     }
 
-
     public void send(Message message) {
+        MonitorService.notifyMessage("Message Received", this);
         queue.add(message);
     }
 
@@ -65,7 +63,10 @@ public class Actor implements SendMessage, Runnable {
         if (!queue.isEmpty()) {
             System.out.println("\nactor " + getName() + " list message");
             System.out.println("--------------------------------------");
-            queue.forEach(m -> System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName()));
+            queue.forEach(m -> {
+                if (m.getActor() != null)
+                    System.out.println(m.getActor().getName() + " says " + "\"" + m.getMessage() + "\"" + " to " + getName());
+            });
             System.out.println("\n");
         }
     }
@@ -97,9 +98,5 @@ public class Actor implements SendMessage, Runnable {
         return messageList;
     }
 
-    //Function run(Start) Thread
-    @Override
-    public void run() {
-        process.processMessage(this); //Call the function which process the messages
-    }
+
 }

@@ -1,5 +1,7 @@
 package actors;
 
+import message.Message;
+
 import java.util.LinkedList;
 
 /**
@@ -34,9 +36,7 @@ public class InsultActor extends Actor {
         return list;
     }
 
-    public String processMessage() {
-        if (getQueue() != null) {
-            return getInsultMessage();
-        } else return null;
+    public void processMessage(Message message) {
+
     }
 }

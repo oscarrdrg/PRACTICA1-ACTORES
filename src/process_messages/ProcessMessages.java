@@ -2,12 +2,16 @@ package process_messages;
 
 import actors.Actor;
 import message.Message;
+import services.MonitorService;
 
-public class ProcessMessages {
-    public ProcessMessages() {
+public class ProcessMessages implements Runnable {
+    Actor actor;
+    public ProcessMessages(Actor actor) {
+        this.actor = actor;
+
     }
 
-    public void processMessage(Actor actor) {
+    public void run() {
         boolean finished = false;
 
         //In case the process doesn't finish, we're still processing messages
@@ -40,7 +44,7 @@ public class ProcessMessages {
                     } else {
                         System.out.println("I received a quite message from " + message.getActor().getName());
                         finished = true;
-                        if (actor.getMonitorService() != null) actor.getMonitorService().notifyMessage("Finalization");
+                        MonitorService.notifyMessage("Finalization", actor);
                     }
 
                 }

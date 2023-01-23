@@ -2,6 +2,8 @@ package actors.singleton;
 
 import actors.Actor;
 import actors.proxys.ActorProxy;
+import process_messages.ProcessMessages;
+import services.MonitorService;
 
 import java.util.HashMap;
 
@@ -24,10 +26,10 @@ public class ActorContext {
         ActorProxy newActorProxy = new ActorProxy(actor.getName());
         newActorProxy.setActor(actor); //Set the Actor reference to the proxy
 
-        if (actor.getMonitorService() != null) actor.getMonitorService().notifyMessage("Creation");
+        MonitorService.notifyMessage("Creation", newActorProxy.getActor());
 
 
-        Thread thread = new Thread(newActorProxy.getActor()); //Create Thread
+        Thread thread = new Thread(new ProcessMessages(newActorProxy.getActor())); //Create Thread
         thread.start(); //We start the thread that will process the messages
 
         try {
