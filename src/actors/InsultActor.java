@@ -28,7 +28,7 @@ public class InsultActor extends Actor {
         return list.get(index);
     }
 
-    public void addInsultMessage(String message) {
+    public void addInsult(String message) {
         list.add(message);
     }
 
@@ -37,6 +37,20 @@ public class InsultActor extends Actor {
     }
 
     public void processMessage(Message message) {
+
+        Actor newActor = message.getActor();
+
+        try {
+            Thread.sleep(2000); //Sleep the Thread
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        newActor.send(new Message(this, getInsultMessage()));
+        try {
+            Thread.sleep(2000); //Sleep the Thread
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

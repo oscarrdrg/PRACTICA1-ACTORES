@@ -26,6 +26,7 @@ public class DynamicProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-        return method.invoke(target, args);
+        if(method.getReturnType().getName().equals("void")) proxy.send(new Message(proxy.getActor(), args[0].toString()));
+        return null;
     }
 }

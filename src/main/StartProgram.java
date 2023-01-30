@@ -4,12 +4,15 @@ import actors.HelloWorldActor;
 import actors.InsultActor;
 import actors.decorators.EncryptionDecorator;
 import actors.decorators.FirewallDecorator;
+import actors.decorators.LambdaFirewallDecorator;
+import actors.observer.ActorListener;
 import actors.proxys.ActorProxy;
 import actors.proxys.ActorProxyExtended;
 import actors.proxys.DynamicProxy;
 import actors.ring.RingActor;
 import actors.singleton.ActorContext;
 import interfaces.InsultService;
+import message.ClosureMessage;
 import message.Message;
 import message.MessageMain;
 import services.InsultServiceImpl;
@@ -30,7 +33,9 @@ public class StartProgram {
         RingActor ringActor3 = new RingActor("William");
 
         HelloWorldActor hello_world_actor = new HelloWorldActor("HelloWorld");
+        ActorListener listener = new ActorListener("Listener");
 
+        /* Add the actor to MonitorService */
         MonitorService.addActorsMonitor(ringActor);
         MonitorService.addActorsMonitor(ringActor2);
         MonitorService.addActorsMonitor(ringActor3);
@@ -41,9 +46,12 @@ public class StartProgram {
         ActorProxy proxy3 = ActorContext.spawnActor(ringActor3);
         ActorProxy proxy4 = ActorContext.spawnActor(hello_world_actor);
 
-        /*Decorators*/
+        /* Decorators */
         ActorProxy decorator = ActorContext.spawnActor(new FirewallDecorator(proxy.getActor()));
         ActorProxy encrypt = ActorContext.spawnActor(new EncryptionDecorator(decorator.getActor()));
+        LambdaFirewallDecorator lambdaFirewallDecorator = new LambdaFirewallDecorator(encrypt.getActor());
+        lambdaFirewallDecorator.addClosure(message -> !message.getMessage().contains("scam"));
+        ActorProxy lambda = ActorContext.spawnActor(lambdaFirewallDecorator);
 
 
         /* Set the Ring Actors in the ring */
@@ -51,7 +59,7 @@ public class StartProgram {
         ringActor2.setNextActorToConnect(ringActor3);
         ringActor3.setNextActorToConnect(ringActor);
 
-        /*Receive prove*/
+        /* Receive prove */
         ActorProxy insult = ActorContext.spawnActor(new InsultActor("InsultActor"));
         ActorProxyExtended actorProxyExtended = new ActorProxyExtended("Extended");
         insult.setActorProxyExtended(actorProxyExtended);
@@ -60,9 +68,9 @@ public class StartProgram {
         System.out.println("\nMain message, receive is working well -> " + message);
 
 
+        /* Dynamic proxy */
         InsultService service = (InsultService) DynamicProxy.newInstance(new InsultServiceImpl(), insult);
-        service.addInsult("Gilipollas");
-        System.out.println(service.getAllInsults());
+        service.addInsult("Silly");
 
         try {
             Thread.sleep(2000); //Sleep the Thread to print well the Actors in context
@@ -75,7 +83,10 @@ public class StartProgram {
 
 
         //Starting the communication
-        encrypt.send(new Message(proxy4.getActor(), "Start Communication"));
+        lambda.send(new Message(proxy4.getActor(), "This is a virus message"));
+        lambda.send(new Message(proxy3.getActor(), "This is a spam message"));
+        lambda.send(new Message(proxy3.getActor(), "This is a scam message"));
+        encrypt.send(new Message(proxy4.getActor(), "Start communication"));
 
     }
 

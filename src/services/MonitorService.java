@@ -22,8 +22,10 @@ public class MonitorService{
 
     public static Actor getActorFromMonitorService(String name) {
         List<String> actorInList = actorMonitorList.stream().filter(actorName -> actorName.equals(name)).collect(Collectors.toList());
-        String actorName = actorInList.get(0);
-        return ActorContext.getActorFromList(actorName);
+        if(actorInList.size() != 0){
+            String actorName = actorInList.get(0);
+            return ActorContext.getActorFromList(actorName);
+        }else  return null;
     }
 
     public static String getTraffic(Actor actor) {
