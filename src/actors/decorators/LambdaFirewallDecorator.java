@@ -21,6 +21,7 @@ public class LambdaFirewallDecorator extends Actor {
         boolean blocked = false;
        for(Predicate<Message> predicate : list){
            if(predicate.test(message)) blocked = true;
+
        }
 
        if(blocked) System.out.println("Message blocked\n");
