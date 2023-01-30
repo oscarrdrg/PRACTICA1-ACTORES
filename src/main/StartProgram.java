@@ -86,7 +86,7 @@ public class StartProgram {
         lambda.send(new Message(proxy4.getActor(), "This is a virus message"));
         lambda.send(new Message(proxy3.getActor(), "This is a spam message"));
         lambda.send(new Message(proxy3.getActor(), "This is a scam message"));
-        encrypt.send(new Message(proxy4.getActor(), "Start communication"));
+        lambda.send(new Message(proxy4.getActor(), "Start communication"));
 
     }
 
