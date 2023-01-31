@@ -4,7 +4,6 @@ import actors.Actor;
 import message.Message;
 
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
 public class LambdaFirewallDecorator extends Actor {
